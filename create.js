@@ -40,7 +40,15 @@ function serverlessFunction (command) {
 }
 
 function gitCommandFunction (command) {
-  const execCommand = 'cd services/' + createServiceCommand.serviceName + '; git init; ln -s ../../config/credentials.json ./credentials.json; git remote add origin ' + createServiceCommand.targetRepository + '; cd ../; git push origin master; rm -rf ' + createServiceCommand.serviceName + '; git submodule add ' + createServiceCommand.targetRepository + ' ' + createServiceCommand.serviceName
+  let powershellModifier = ''
+  let simlinkCommand = 'ln -s ../../config/credentials.json ./credentials.json'
+  let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
+  switch (shell) {
+    case 'powershell':
+      powershellModifier = 'o'
+      simlinkCommand = 'cmd /c mklink credentials.json ..\\..\\config\\credentials.json'
+  }
+  const execCommand = 'cd services/' + createServiceCommand.serviceName + '; git init; ' + simlinkCommand + '; git remote add origin ' + createServiceCommand.targetRepository + '; cd ../; git push origin master; rm -r -f' + powershellModifier + ' ' + createServiceCommand.serviceName + '; git submodule add ' + createServiceCommand.targetRepository + ' ' + createServiceCommand.serviceName
   command.executeCommand(
     execCommand,
     'Created new service',

@@ -37,7 +37,7 @@ test('createServiceCommand executes commands in sequence', (done) => {
       expect(commandArguments[3].name).toEqual('gitCommandFunction')
 
       commandArguments = yield 'gitCommandArguments'
-      expect(commandArguments[0]).toEqual('cd services/servicename; git init; ln -s ../../config/credentials.json ./credentials.json; git remote add origin targetrepository; cd ../; git push origin master; rm -rf servicename; git submodule add targetrepository servicename')
+      expect(commandArguments[0]).toEqual('cd services/servicename; git init; ln -s ../../config/credentials.json ./credentials.json; git remote add origin targetrepository; cd ../; git push origin master; rm -r -f servicename; git submodule add targetrepository servicename')
       expect(commandArguments[1].length).toBeGreaterThan(0)
       expect(commandArguments[2].length).toBeGreaterThan(0)
       expect(commandArguments[3]).toBeUndefined()
@@ -75,6 +75,40 @@ test('createServiceCommand prints usage when servicename argument is not passed 
   }
 
   createServiceCommand.callback(['node', 'path', 'something', undefined, 'targetrepository', 'template'], null, command)
+})
+
+test('createServiceCommand adjusts for powershell', (done) => {
+  function * testCommandsInSequence () {
+    while (true) {
+      let commandArguments = yield 'serverlessCommandArgument'
+      expect(commandArguments[0]).toEqual('cd services; yarn sls create --template template --path servicename')
+      expect(commandArguments[1].length).toBeGreaterThan(0)
+      expect(commandArguments[2].length).toBeGreaterThan(0)
+      expect(commandArguments[3].name).toEqual('gitCommandFunction')
+
+      commandArguments = yield 'gitCommandArguments'
+      expect(commandArguments[0]).toEqual('cd services/servicename; git init; cmd /c mklink credentials.json ..\\..\\config\\credentials.json; git remote add origin targetrepository; cd ../; git push origin master; rm -r -fo servicename; git submodule add targetrepository servicename')
+      return
+    }
+  }
+
+  const mockExecuteCommand = (commandString, successMessage, errorMessage, nextFunctionCall) => {
+    testGenerator.next([commandString, successMessage, errorMessage, nextFunctionCall])
+    if (typeof nextFunctionCall !== 'undefined') {
+      nextFunctionCall(command)
+    } else {
+      done()
+    }
+  }
+
+  const command = {
+    executeCommand: mockExecuteCommand,
+    parameters: { shell: 'powershell' }
+  }
+
+  const testGenerator = testCommandsInSequence()
+  testGenerator.next() // Initialize generator to first yield
+  createServiceCommand.callback(['node', 'path', 'something', 'servicename', 'targetrepository', 'template'], null, command)
 })
 
 test('createServiceCommand prints usage when target-repository argument is not passed in', (done) => {
