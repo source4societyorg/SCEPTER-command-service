@@ -1,6 +1,6 @@
 {
   "name": "SCEPTER-command-service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SCEPTER plugin command to handle services",
   "main": "index.js",
   "repository": "https://github.com/source4societyorg/SCEPTER-command-service",
