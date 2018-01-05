@@ -48,7 +48,7 @@ function gitCommandFunction (command) {
       powershellModifier = 'o'
       simlinkCommand = 'cmd /c mklink credentials.json ..\\..\\config\\credentials.json'
   }
-  const execCommand = 'cd services/' + createServiceCommand.serviceName + '; git init; ' + simlinkCommand + '; git remote add origin ' + createServiceCommand.targetRepository + '; cd ../; git push origin master; rm -r -f' + powershellModifier + ' ' + createServiceCommand.serviceName + '; git submodule add ' + createServiceCommand.targetRepository + ' ' + createServiceCommand.serviceName
+  const execCommand = 'cd services/' + createServiceCommand.serviceName + '; git init; git add .; git commit -m \'Initial commit\'; git remote add origin ' + createServiceCommand.targetRepository + '; git push -f origin master; ' + simlinkCommand + '; cd ../; rm -r -f' + powershellModifier + ' ' + createServiceCommand.serviceName + '; git submodule add --force ' + createServiceCommand.targetRepository + ' ' + createServiceCommand.serviceName
   command.executeCommand(
     execCommand,
     'Created new service',

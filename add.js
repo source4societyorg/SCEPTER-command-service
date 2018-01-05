@@ -1,7 +1,7 @@
 'use strict'
 const addServiceCommand = {
   command: 'service:add',
-  usage: 'service:add <git-repository> [<fork-repository>]',
+  usage: 'service:add <service-name> <git-repository> [<fork-repository>]',
   description: 'Use this to add an existing service to your project as a submodule',
   callback: function (args, credentials, command) {
     const serviceName = args[3]
