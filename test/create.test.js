@@ -31,7 +31,7 @@ test('createServiceCommand executes commands in sequence', (done) => {
   function * testCommandsInSequence () {
     while (true) {
       let commandArguments = yield 'serverlessCommandArgument'
-      expect(commandArguments[0]).toEqual('cd services; yarn sls create --template template --path servicename')
+      expect(commandArguments[0]).toEqual('cd services; yarn sls create --template template --path services/servicename')
       expect(commandArguments[1].length).toBeGreaterThan(0)
       expect(commandArguments[2].length).toBeGreaterThan(0)
       expect(commandArguments[3].name).toEqual('gitCommandFunction')
@@ -81,7 +81,7 @@ test('createServiceCommand adjusts for powershell', (done) => {
   function * testCommandsInSequence () {
     while (true) {
       let commandArguments = yield 'serverlessCommandArgument'
-      expect(commandArguments[0]).toEqual('cd services; yarn sls create --template template --path servicename')
+      expect(commandArguments[0]).toEqual('cd services; yarn sls create --template template --path services/servicename')
       expect(commandArguments[1].length).toBeGreaterThan(0)
       expect(commandArguments[2].length).toBeGreaterThan(0)
       expect(commandArguments[3].name).toEqual('gitCommandFunction')

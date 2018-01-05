@@ -29,7 +29,7 @@ function callbackFunction (args, credentials, command) {
 function serverlessFunction (command) {
   let execCommand = 'cd services; yarn sls create'
   execCommand += ' --template ' + createServiceCommand.template
-  execCommand += ' --path ' + createServiceCommand.serviceName
+  execCommand += ' --path services/' + createServiceCommand.serviceName
 
   command.executeCommand(
     execCommand,
