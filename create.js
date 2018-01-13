@@ -41,12 +41,12 @@ function serverlessFunction (command) {
 
 function gitCommandFunction (command) {
   let powershellModifier = ''
-  let simlinkCommand = 'ln -s ../../config/credentials.json ./credentials.json'
+  let simlinkCommand = 'ln -s ../../config/credentials.json ./credentials.json; ln -s ../../config/parameters.json ./parameters.json; ln -s ../../config/services.json ./services.json'
   let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
   switch (shell) {
     case 'powershell':
       powershellModifier = 'o'
-      simlinkCommand = 'cmd /c mklink credentials.json ..\\..\\config\\credentials.json'
+      simlinkCommand = 'cmd /c mklink credentials.json ..\\..\\config\\credentials.json; cmd /c mklink parameters.json ..\\..\\config\\services.json; cmd /c mklink parameters.json ..\\..\\config\\services.json'
   }
   const execCommand = 'cd services/' + createServiceCommand.serviceName + '; git init; git add .; git commit -m \'Initial commit\'; git remote add origin ' + createServiceCommand.targetRepository + '; git push -f origin master; ' + simlinkCommand + '; cd ../; rm -r -f' + powershellModifier + ' ' + createServiceCommand.serviceName + '; git submodule add --force ' + createServiceCommand.targetRepository + ' ' + createServiceCommand.serviceName
   command.executeCommand(

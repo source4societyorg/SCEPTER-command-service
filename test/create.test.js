@@ -37,7 +37,7 @@ test('createServiceCommand executes commands in sequence', (done) => {
       expect(commandArguments[3].name).toEqual('gitCommandFunction')
 
       commandArguments = yield 'gitCommandArguments'
-      expect(commandArguments[0]).toEqual('cd services/servicename; git init; git add .; git commit -m \'Initial commit\'; git remote add origin targetrepository; git push -f origin master; ln -s ../../config/credentials.json ./credentials.json; cd ../; rm -r -f servicename; git submodule add --force targetrepository servicename')
+      expect(commandArguments[0]).toEqual('cd services/servicename; git init; git add .; git commit -m \'Initial commit\'; git remote add origin targetrepository; git push -f origin master; ln -s ../../config/credentials.json ./credentials.json; ln -s ../../config/parameters.json ./parameters.json; ln -s ../../config/services.json ./services.json; cd ../; rm -r -f servicename; git submodule add --force targetrepository servicename')
       expect(commandArguments[1].length).toBeGreaterThan(0)
       expect(commandArguments[2].length).toBeGreaterThan(0)
       expect(commandArguments[3]).toBeUndefined()
@@ -87,7 +87,7 @@ test('createServiceCommand adjusts for powershell', (done) => {
       expect(commandArguments[3].name).toEqual('gitCommandFunction')
 
       commandArguments = yield 'gitCommandArguments'
-      expect(commandArguments[0]).toEqual('cd services/servicename; git init; git add .; git commit -m \'Initial commit\'; git remote add origin targetrepository; git push -f origin master; cmd /c mklink credentials.json ..\\..\\config\\credentials.json; cd ../; rm -r -fo servicename; git submodule add --force targetrepository servicename')
+      expect(commandArguments[0]).toEqual('cd services/servicename; git init; git add .; git commit -m \'Initial commit\'; git remote add origin targetrepository; git push -f origin master; cmd /c mklink credentials.json ..\\..\\config\\credentials.json; cmd /c mklink parameters.json ..\\..\\config\\services.json; cmd /c mklink parameters.json ..\\..\\config\\services.json; cd ../; rm -r -fo servicename; git submodule add --force targetrepository servicename')
       return
     }
   }
