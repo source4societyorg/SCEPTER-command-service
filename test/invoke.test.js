@@ -52,3 +52,16 @@ test('invokeServiceCommand prints usage when provider argument is not passed in'
 
   invokeServiceCommand.callback(['node', 'path', 'something', 'servicename', undefined, 'invoke', 'local', '-f', 'somefunc'], null, command)
 })
+
+test('invokeServiceCommand executes different command for powershell', (done) => {
+  const mockCommand = {
+    parameters: { shell: 'powershell' },
+    executeCommand: (command, successMessage, errorMessage) => {
+      expect(command).toEqual('cp ./services/servicename/config/serverless_template_undefined.yml ./services/servicename/serverless.yml; if($?) { cp ./config/*.json ./servicesservicename/ }; if($?) { cd ./services/servicename; yarn sls invoke invoke local -f somefunc }')
+      expect(successMessage.length).toBeGreaterThan(0)
+      expect(errorMessage.length).toBeGreaterThan(0)
+      done()
+    }
+  }
+  invokeServiceCommand.serverlessCommand(mockCommand)
+})
