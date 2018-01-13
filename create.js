@@ -31,7 +31,7 @@ function forkFunction (command) {
       commandString = 'o'
   }
   command.executeCommand(
-    'cd services; git clone ' + createServiceCommand.forkRepository + ' ' + createServiceCommand.serviceName + '; cd ' + createServiceCommand.serviceName + '; git remote rm origin; git remote add origin ' + createServiceCommand.gitRepository + '; git push origin master; cd ../; rm -r -f' + commandString + ' ' + createServiceCommand.serviceName + '; git submodule add ' + createServiceCommand.gitRepository + ' ' + createServiceCommand.serviceName,
+    'cd services; git clone ' + createServiceCommand.forkRepository + ' ' + createServiceCommand.serviceName + '; cd ' + createServiceCommand.serviceName + '; git remote rm origin; git remote add origin ' + createServiceCommand.gitRepository + '; git push -f origin master; cd ../; rm -r -f' + commandString + ' ' + createServiceCommand.serviceName + '; git submodule add ' + createServiceCommand.gitRepository + ' ' + createServiceCommand.serviceName,
     'Successfully forked service template and added it to project',
     'Failed to fork service template repository',
     createServiceCommand.initializeService
