@@ -6,7 +6,7 @@ const createServiceCommand = {
   callback: function (args, credentials, command) {
     const serviceName = args[3]
     const gitRepository = args[4]
-    const forkRepository = "git@github.com:source4societyorg/SCEPTER-service-template.git"
+    const forkRepository = 'git@github.com:source4societyorg/SCEPTER-service-template.git'
 
     this.serviceName = serviceName
     this.gitRepository = gitRepository
@@ -39,12 +39,6 @@ function forkFunction (command) {
 }
 
 function initializeServiceFunction (command) {
-  let commandString = ''
-  let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
-  switch (shell) {
-    case 'powershell':
-      commandString = 'o'
-  }
   command.executeCommand(
     'cd services/' + createServiceCommand.serviceName + '; node config/initialize.js',
     'Successfully created service',
