@@ -32,7 +32,10 @@ function callbackFunction (args, credentials, command) {
 }
 
 function serverlessFunction (command) {
-  let execCommand = 'cp ./services/' + deployServiceCommand.serviceName + '/config/serverless_template_' + deployServiceCommand.provider + '.yml ./services/' + deployServiceCommand.serviceName + '/serverless.yml && cd ./services/' + deployServiceCommand.serviceName + ' && yarn sls deploy ' + deployServiceCommand.slsArgs
+  const copyTemplateCommandString = 'cp ./services/' + deployServiceCommand.serviceName + '/config/serverless_template_' + deployServiceCommand.provider + '.yml ./services/' + deployServiceCommand.serviceName + '/serverless.yml'
+  const copyCredentialsCommandString = 'cp ./config/*.json ./services/' + deployServiceCommand.serviceName
+  const deployCommandString = 'cd ./services/' + deployServiceCommand.serviceName + ' && yarn sls deploy ' + deployServiceCommand.slsArgs
+  let execCommand = copyTemplateCommandString + ' && ' + copyCredentialsCommandString + ' && ' + deployCommandString
 
   command.executeCommand(
     execCommand,
