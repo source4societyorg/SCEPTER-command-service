@@ -84,14 +84,16 @@ test('createServiceCommand prints usage when git-repository argument is not pass
 })
 
 test('initializeServiceFunction executes correct command', (done) => {
+  /* eslint-disable no-template-curly-in-string */
   const mockCommand = {
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('cd services/test; yarn install; node config/initialize.js')
+      expect(command).toEqual('cd services/test; yarn install; echo \'service: ${file(./parameters.json):appName}-test\' > ./config/service_name.yml; node config/initialize.js')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()
     }
   }
+  /* eslint-enable no-template-curly-in-string */
   createServiceCommand.serviceName = 'test'
   createServiceCommand.initializeService(mockCommand)
 })

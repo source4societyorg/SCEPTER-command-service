@@ -48,11 +48,13 @@ function forkFunction (command) {
 }
 
 function initializeServiceFunction (command) {
+  /* eslint-disable no-template-curly-in-string */
   command.executeCommand(
-    'cd services/' + createServiceCommand.serviceName + '; yarn install; node config/initialize.js',
+    'cd services/' + createServiceCommand.serviceName + '; yarn install; echo \'service: ${file(./parameters.json):appName}-' + createServiceCommand.serviceName + '\' > ./config/service_name.yml; node config/initialize.js',
     'Successfully created service',
     'Failed to execute initialization script'
   )
+  /* eslint-enable no-template-curly-in-string */
 }
 
 module.exports = createServiceCommand
