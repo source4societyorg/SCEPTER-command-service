@@ -16,7 +16,7 @@ SCEPTER plugin command to manage project services
 
 `service:create <service-name> <target-repository> [<template>]`
 
-This command will create a new service using the Serverless Framework by issuing the `serverless deploy` command [See: Serverless Create AWS Example](https://serverless.com/framework/docs/providers/aws/cli-reference/create/). The `service-name` will determine what folder under the `services` folder the submodule will be created in. The `target-repository` is the URL of the repository that the new service will be pushed to. Optionally, the `template` argument defaults to `aws-nodejs` but can be provided to modify the serverless template.
+This command will create a new service using the Serverless Framework by forking the associated template repository. `[<template>]` defaults to `nodejs` and will create a new service using [SCEPTER-service-template-nodejs](https://github.com/source4societyorg/SCEPTER-service-template-nodejs). Other acceptable arguments for `[<template>]` include `csharp`. The `service-name` will determine what folder under the `services` folder the submodule will be created in and modify the configuration to name the service accordingly when deployed to cloud service providers. The `target-repository` is the URL of the repository that the new service will be pushed to. 
 
 To add an existing service, see the `service:add` command.
 

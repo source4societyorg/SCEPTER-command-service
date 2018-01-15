@@ -1,12 +1,21 @@
 'use strict'
 const createServiceCommand = {
   command: 'service:create',
-  usage: 'service:create <service-name> <git-repository>',
+  usage: 'service:create <service-name> <git-repository> [<template>]',
   description: 'Use this to create a new service for your project as a submodule form the base SCEPTER template',
   callback: function (args, credentials, command) {
     const serviceName = args[3]
     const gitRepository = args[4]
-    const forkRepository = 'git@github.com:source4societyorg/SCEPTER-service-template.git'
+    const template = args[5] || 'nodejs'
+    let forkRepository = 'git@github.com:source4societyorg/SCEPTER-service-template-'
+    switch (template) {
+      case 'csharp':
+      case 'nodejs':
+        forkRepository += template
+        break
+      default:
+        forkRepository = template
+    }
 
     this.serviceName = serviceName
     this.gitRepository = gitRepository
@@ -40,7 +49,7 @@ function forkFunction (command) {
 
 function initializeServiceFunction (command) {
   command.executeCommand(
-    'cd services/' + createServiceCommand.serviceName + '; node config/initialize.js',
+    'cd services/' + createServiceCommand.serviceName + '; yarn install; node config/initialize.js',
     'Successfully created service',
     'Failed to execute initialization script'
   )

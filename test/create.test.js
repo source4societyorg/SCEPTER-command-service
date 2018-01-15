@@ -15,7 +15,7 @@ test('createServiceCommand has callback which sets up and kicks off command exec
     expect(errorMessage.length).toBeGreaterThan(0)
     expect(createServiceCommand.serviceName).toEqual('servicename')
     expect(createServiceCommand.gitRepository).toEqual('gitrepository')
-    expect(createServiceCommand.forkRepository).toEqual('git@github.com:source4societyorg/SCEPTER-service-template.git')
+    expect(createServiceCommand.forkRepository).toEqual('git@github.com:source4societyorg/SCEPTER-service-template-nodejs')
     done()
   }
 
@@ -28,7 +28,7 @@ test('createServiceCommand has callback which sets up and kicks off command exec
 
 test('createServiceCommand forks service from scepter service template', (done) => {
   const mockExecuteCommand = (commandString, successMessage, errorMessage, nextFunctionCall) => {
-    expect(commandString).toEqual('cd services; git clone git@github.com:source4societyorg/SCEPTER-service-template.git servicename; cd servicename; git remote rm origin; git remote add origin gitrepository; git push -f origin master; cd ../; rm -r -f servicename; git submodule add gitrepository servicename')
+    expect(commandString).toEqual('cd services; git clone git@github.com:source4societyorg/SCEPTER-service-template-nodejs servicename; cd servicename; git remote rm origin; git remote add origin gitrepository; git push -f origin master; cd ../; rm -r -f servicename; git submodule add gitrepository servicename')
     expect(successMessage.length).toBeGreaterThan(0)
     expect(errorMessage.length).toBeGreaterThan(0)
     done()
@@ -43,7 +43,7 @@ test('createServiceCommand forks service from scepter service template', (done) 
 
 test('createServiceCommand modifies command for powershell', (done) => {
   const mockExecuteCommand = (commandString, successMessage, errorMessage, nextFunctionCall) => {
-    expect(commandString).toEqual('cd services; git clone git@github.com:source4societyorg/SCEPTER-service-template.git servicename; cd servicename; git remote rm origin; git remote add origin gitrepository; git push -f origin master; cd ../; rm -r -fo servicename; git submodule add gitrepository servicename')
+    expect(commandString).toEqual('cd services; git clone git@github.com:source4societyorg/SCEPTER-service-template-nodejs servicename; cd servicename; git remote rm origin; git remote add origin gitrepository; git push -f origin master; cd ../; rm -r -fo servicename; git submodule add gitrepository servicename')
     expect(successMessage.length).toBeGreaterThan(0)
     expect(errorMessage.length).toBeGreaterThan(0)
     done()
@@ -86,7 +86,7 @@ test('createServiceCommand prints usage when git-repository argument is not pass
 test('initializeServiceFunction executes correct command', (done) => {
   const mockCommand = {
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('cd services/test; node config/initialize.js')
+      expect(command).toEqual('cd services/test; yarn install; node config/initialize.js')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()
