@@ -1,4 +1,5 @@
 'use strict'
+const prepareSlsArgs = require('./common').prepareSlsArgs
 
 const invokeServiceCommand = {
   command: 'service:invoke',
@@ -11,14 +12,7 @@ const invokeServiceCommand = {
 function callbackFunction (args, credentials, command) {
   const serviceName = args[3]
   const provider = args[4]
-
-  let slsArgs = ''
-  if (args.length > 5) {
-    for (let i = 5; i < args.length; i++) {
-      slsArgs += args[i] + ' '
-    }
-  }
-
+  const slsArgs = prepareSlsArgs(args)
   this.serviceName = serviceName
   this.provider = provider
   this.slsArgs = slsArgs

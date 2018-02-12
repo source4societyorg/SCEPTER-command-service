@@ -97,3 +97,9 @@ test('initializeServiceFunction executes correct command', (done) => {
   createServiceCommand.serviceName = 'test'
   createServiceCommand.initializeService(mockCommand)
 })
+
+test('processOptions creates the fork repository string depending on the template choice', () => {
+  expect(createServiceCommand.processOptions('nodejs', 'test-')).toEqual('test-nodejs')
+  expect(createServiceCommand.processOptions('csharp', 'test-')).toEqual('test-csharp')
+  expect(createServiceCommand.processOptions('other', 'test-')).toEqual('other')
+})

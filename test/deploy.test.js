@@ -57,7 +57,7 @@ test('deployServiceCommand executes different command for powershell', (done) =>
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('cp ./services/servicename/config/serverless_template_undefined.yml ./services/servicename/serverless.yml; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename ; yarn sls deploy invoke --stage dev }')
+      expect(command).toEqual('cp ./services/servicename/config/serverless_template_undefined.yml ./services/servicename/serverless.yml; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename ; yarn install && yarn test && yarn sls deploy invoke --stage dev }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()

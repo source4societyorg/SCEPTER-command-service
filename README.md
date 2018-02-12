@@ -4,7 +4,12 @@ SCEPTER plugin command to manage project services
 [![scepter-logo](http://res.cloudinary.com/source-4-society/image/upload/v1514622047/scepter_hzpcqt.png)](https://github.com/source4societyorg/SCEPTER-core)
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](http://standardjs.com)
+
 [![Build Status](https://travis-ci.org/source4societyorg/SCEPTER-command-service.svg?branch=master)](https://travis-ci.org/source4societyorg/SCEPTER-command-service)
+
+[![codecov](https://codecov.io/gh/source4societyorg/SCEPTER-command-service/branch/master/graph/badge.svg)](https://codecov.io/gh/source4societyorg/SCEPTER-command-service)
+
+[![Serverless](http://public.serverless.com/badges/v1.svg)](http://serverless.com)
 
 # Installation
 
@@ -30,4 +35,4 @@ This command is for services that have multiple serverless.yml configurations fo
 
 `service:deploy <service-name> <provider> [<optional sls arguments>]`
 
-This command is for services that have multiple serverless.yml configurations for various providers defined (Otherwise use `serverless deploy` instead). The serverless.yml for each provider should be defined in a folder named `config` within the service folder. Each file should be named `serverless_template_<provider>.yml` with the name of the provider substituted in. Running this command will swap out the base serverless.yml file with the template of the specified provider so that a service can be deployed across multiple providers with a single command.
+This command is for services that have multiple serverless.yml configurations for various providers defined (Otherwise use `serverless deploy` instead). The serverless.yml for each provider should be defined in a folder named `config` within the service folder. Each file should be named `serverless_template_<provider>.yml` with the name of the provider substituted in. Running this command will swap out the base serverless.yml file with the template of the specified provider so that a service can be deployed across multiple providers with a single command. It will also run `yarn install` and `yarn test` commands and will only deploy if successful error code is returnd

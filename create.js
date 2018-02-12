@@ -8,14 +8,7 @@ const createServiceCommand = {
     const gitRepository = args[4]
     const template = args[5] || 'nodejs'
     let forkRepository = 'git@github.com:source4societyorg/SCEPTER-service-template-'
-    switch (template) {
-      case 'csharp':
-      case 'nodejs':
-        forkRepository += template
-        break
-      default:
-        forkRepository = template
-    }
+    forkRepository = createServiceCommand.processOptions(template, forkRepository)
 
     this.serviceName = serviceName
     this.gitRepository = gitRepository
@@ -29,7 +22,20 @@ const createServiceCommand = {
     createServiceCommand.forkCommand(command)
   },
   forkCommand: forkFunction,
-  initializeService: initializeServiceFunction
+  initializeService: initializeServiceFunction,
+  processOptions: processOptionsFunction
+}
+
+function processOptionsFunction (template, forkRepository) {
+  switch (template) {
+    case 'csharp':
+    case 'nodejs':
+      forkRepository += template
+      break
+    default:
+      forkRepository = template
+  }
+  return forkRepository
 }
 
 function forkFunction (command) {
