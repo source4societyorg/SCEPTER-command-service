@@ -16,7 +16,7 @@ test('deployServiceCommand has callback which sets up and kicks off command exec
     expect(nextFunctionCall).toBeUndefined()
     expect(deployServiceCommand.serviceName).toEqual('servicename')
     expect(deployServiceCommand.provider).toEqual('provider')
-    expect(deployServiceCommand.slsArgs).toEqual('--stage dev ')
+    expect(deployServiceCommand.slsArgs).toEqual('extra ')
     done()
   }
 
@@ -24,7 +24,7 @@ test('deployServiceCommand has callback which sets up and kicks off command exec
     executeCommand: mockExecuteCommand
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', '--stage', 'dev'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', 'development', 'extra'], null, command)
 })
 
 test('deployServiceCommand prints usage when servicename argument is not passed in', (done) => {
@@ -50,18 +50,31 @@ test('deployServiceCommand prints usage when provider argument is not passed in'
     printMessage: mockPrintMessage
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', undefined, 'invoke', '--stage', 'dev'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', undefined, 'development', 'extra'], null, command)
+})
+
+test('deployServiceCommand prints usage when environment argument is not passed in', (done) => {
+  const mockPrintMessage = (message) => {
+    expect(message).toEqual('Usage: node bin/scepter ' + deployServiceCommand.usage)
+    done()
+  }
+
+  const command = {
+    printMessage: mockPrintMessage
+  }
+
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', undefined, 'extra'], null, command)
 })
 
 test('deployServiceCommand executes different command for powershell', (done) => {
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('cp ./services/servicename/config/serverless_template_undefined.yml ./services/servicename/serverless.yml; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename ; yarn install && yarn test && yarn sls deploy invoke --stage dev }')
+      expect(command).toEqual('yarn scepter cloud:configure testprovider development; if($?) { cp ./services/servicename/config/serverless_template_testprovider.yml ./services/servicename/serverless.yml }; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename; }; if($?) { yarn install }; if($?) { yarn test }; if($?) { yarn sls deploy extra --stage=development }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()
     }
   }
-  deployServiceCommand.serverlessCommand(mockCommand)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'testprovider', 'development', 'extra'], null, mockCommand)
 })

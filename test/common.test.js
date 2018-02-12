@@ -8,4 +8,5 @@ test('prepareSlsArgs will add extra arguments to command if args length is great
   expect(prepareSlsArgs([1, 2, 3, 4, 5])).toEqual('')
   expect(prepareSlsArgs([1, 2, 3, 4, 5, '6'])).toEqual('6 ')
   expect(prepareSlsArgs([1, 2, 3, 4, 5, '6', '7'])).toEqual('6 7 ')
+  expect(prepareSlsArgs([1, 2, 3, 4, 5, '6', '7'], 6)).toEqual('7 ')
 })
