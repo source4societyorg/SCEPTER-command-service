@@ -70,7 +70,7 @@ test('deployServiceCommand executes different command for powershell', (done) =>
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('yarn scepter cloud:configure testprovider development; if($?) { cp ./services/servicename/config/serverless_template_testprovider.yml ./services/servicename/serverless.yml }; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename; }; if($?) { yarn install }; if($?) { yarn test }; if($?) { yarn sls deploy extra --stage=development }')
+      expect(command).toEqual('yarn scepter cloud:configure testprovider development; if($?) { cp ./services/servicename/config/serverless_template_testprovider.yml ./services/servicename/serverless.yml }; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename }; if($?) { yarn install }; if($?) { yarn test }; if($?) { yarn sls deploy extra --stage=development }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()

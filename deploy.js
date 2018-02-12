@@ -32,7 +32,7 @@ function serverlessFunction (command) {
   const scepterCloudConfigure = `yarn scepter cloud:configure ${deployServiceCommand.provider} ${deployServiceCommand.environment}`
   const copyTemplateCommandString = `cp ./services/${deployServiceCommand.serviceName}/config/serverless_template_${deployServiceCommand.provider}.yml ./services/${deployServiceCommand.serviceName}/serverless.yml`
   const copyCredentialsCommandString = `cp ./config/*.json ./services/${deployServiceCommand.serviceName}`
-  const deployCommandString = `cd ./services/${deployServiceCommand.serviceName};`
+  const deployCommandString = `cd ./services/${deployServiceCommand.serviceName}`
   const installPackages = 'yarn install'
   const runTests = 'yarn test'
   const serverlessDeploy = `yarn sls deploy ${deployServiceCommand.slsArgs}--stage=${deployServiceCommand.environment}`
