@@ -19,6 +19,7 @@ function callbackFunction (args, credentials, command) {
   this.provider = provider
   this.slsArgs = slsArgs
   this.environment = environment
+  this.region = credentials.getIn(['environments', this.environment, 'provider', this.provider, 'region'])
 
   if (utilities.isEmpty(provider) || utilities.isEmpty(serviceName) || utilities.isEmpty(environment)) {
     command.printMessage('Usage: node bin/scepter ' + deployServiceCommand.usage)
@@ -29,21 +30,18 @@ function callbackFunction (args, credentials, command) {
 }
 
 function serverlessFunction (command) {
-  const scepterCloudConfigure = `yarn scepter cloud:configure ${deployServiceCommand.provider} ${deployServiceCommand.environment}`
-  const copyTemplateCommandString = `cp ./services/${deployServiceCommand.serviceName}/config/serverless_template_${deployServiceCommand.provider}.yml ./services/${deployServiceCommand.serviceName}/serverless.yml`
-  const copyCredentialsCommandString = `cp ./config/*.json ./services/${deployServiceCommand.serviceName}`
-  const deployCommandString = `cd ./services/${deployServiceCommand.serviceName}`
-  const installPackages = 'yarn install'
-  const runTests = 'yarn test'
-  const serverlessDeploy = `yarn sls deploy ${deployServiceCommand.slsArgs}--stage=${deployServiceCommand.environment}`
+  const scepterCloudConfigure = `yarn scepter cloud:configure ${deployServiceCommand.environment} ${deployServiceCommand.provider}`
+  const scepterServiceBuild = `cd ./services/${deployServiceCommand.serviceName}; yarn build${deployServiceCommand.provider}`
+  const copyCredentialsCommandString = `cp ../../config/*.json ./build/`
+  const serverlessDeploy = `cd ./build; yarn sls deploy ${deployServiceCommand.slsArgs}--stage=${deployServiceCommand.environment} --region=${deployServiceCommand.region}`
   let execCommand = ''
   let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
   switch (shell) {
     case 'powershell':
-      execCommand = `${scepterCloudConfigure}; if($?) { ${copyTemplateCommandString} }; if($?) { ${copyCredentialsCommandString} }; if($?) { ${deployCommandString} }; if($?) { ${installPackages} }; if($?) { ${runTests} }; if($?) { ${serverlessDeploy} }`
+      execCommand = `${scepterCloudConfigure}; if($?) { ${scepterServiceBuild} }; if($?) { ${copyCredentialsCommandString} }; if($?) { ${serverlessDeploy} }`
       break
     default:
-      execCommand = `${scepterCloudConfigure} && ${copyTemplateCommandString} && ${copyCredentialsCommandString} && ${deployCommandString} && ${installPackages} && ${runTests} && ${serverlessDeploy}`
+      execCommand = `${scepterCloudConfigure} && ${scepterServiceBuild} && ${copyCredentialsCommandString} && ${serverlessDeploy}`
   }
 
   command.executeCommand(

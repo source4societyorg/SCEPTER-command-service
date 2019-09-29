@@ -1,4 +1,17 @@
 const deployServiceCommand = require('../deploy.js')
+const immutable = require('immutable')
+
+const mockCredentials = immutable.fromJS({
+  environments: {
+    development: {
+      provider: {
+        testprovider: {
+          region: 'mockRegion'
+        }
+      }
+    }
+  }
+})
 
 test('deployServiceCommand has the correct command property', () => {
   expect(deployServiceCommand.command).toEqual('service:deploy')
@@ -24,7 +37,7 @@ test('deployServiceCommand has callback which sets up and kicks off command exec
     executeCommand: mockExecuteCommand
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', 'development', 'extra'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', 'development', 'extra'], mockCredentials, command)
 })
 
 test('deployServiceCommand prints usage when servicename argument is not passed in', (done) => {
@@ -37,7 +50,7 @@ test('deployServiceCommand prints usage when servicename argument is not passed 
     printMessage: mockPrintMessage
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', undefined, 'provider', '--stage', 'dev'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', undefined, 'provider', '--stage', 'dev'], mockCredentials, command)
 })
 
 test('deployServiceCommand prints usage when provider argument is not passed in', (done) => {
@@ -50,7 +63,7 @@ test('deployServiceCommand prints usage when provider argument is not passed in'
     printMessage: mockPrintMessage
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', undefined, 'development', 'extra'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', undefined, 'development', 'extra'], mockCredentials, command)
 })
 
 test('deployServiceCommand prints usage when environment argument is not passed in', (done) => {
@@ -63,18 +76,18 @@ test('deployServiceCommand prints usage when environment argument is not passed 
     printMessage: mockPrintMessage
   }
 
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', undefined, 'extra'], null, command)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'provider', undefined, 'extra'], mockCredentials, command)
 })
 
 test('deployServiceCommand executes different command for powershell', (done) => {
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('yarn scepter cloud:configure testprovider development; if($?) { cp ./services/servicename/config/serverless_template_testprovider.yml ./services/servicename/serverless.yml }; if($?) { cp ./config/*.json ./services/servicename }; if($?) { cd ./services/servicename }; if($?) { yarn install }; if($?) { yarn test }; if($?) { yarn sls deploy extra --stage=development }')
+      expect(command).toEqual('yarn scepter cloud:configure development testprovider; if($?) { cd ./services/servicename; yarn buildtestprovider }; if($?) { cp ../../config/*.json ./build/ }; if($?) { cd ./build; yarn sls deploy extra --stage=development --region=mockRegion }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()
     }
   }
-  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'testprovider', 'development', 'extra'], null, mockCommand)
+  deployServiceCommand.callback(['node', 'path', 'something', 'servicename', 'testprovider', 'development', 'extra'], mockCredentials, mockCommand)
 })

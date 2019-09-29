@@ -1,6 +1,6 @@
 {
   "name": "SCEPTER-command-service",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "description": "SCEPTER plugin command to handle services",
   "main": "index.js",
   "repository": "https://github.com/source4societyorg/SCEPTER-command-service",
@@ -19,7 +19,7 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest-cli": "^22.0.4"
+    "jest-cli": "^24.9.0"
   },
   "dependencies": {
     "@source4society/scepter-utility-lib": "^0.0.24"
