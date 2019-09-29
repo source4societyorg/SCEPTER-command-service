@@ -26,17 +26,15 @@ function callbackFunction (args, credentials, command) {
 }
 
 function serverlessFunction (command) {
-  const copyTemplateCommandString = 'cp ./services/' + invokeServiceCommand.serviceName + '/config/serverless_template_' + invokeServiceCommand.provider + '.yml ./services/' + invokeServiceCommand.serviceName + '/serverless.yml'
-  const copyConfigurationCommandString = 'cp ./config/*.json ./services/' + invokeServiceCommand.serviceName + '/'
-  const invocationCommandString = 'cd ./services/' + invokeServiceCommand.serviceName + '; ' + 'yarn sls invoke ' + invokeServiceCommand.slsArgs
+  const invocationCommandString = `cd ./services/${invokeServiceCommand.serviceName}; yarn build${invokeServiceCommand.provider}; cd ./build; yarn sls invoke ${invokeServiceCommand.slsArgs}`
   let execCommand = ''
   let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
   switch (shell) {
     case 'powershell':
-      execCommand = copyTemplateCommandString + '; if($?) { ' + copyConfigurationCommandString + ' }; if($?) { ' + invocationCommandString + '}'
+      execCommand = `if($?) {${invocationCommandString}}`
       break
     default:
-      execCommand = copyTemplateCommandString + ' && ' + copyConfigurationCommandString + ' && ' + invocationCommandString
+      execCommand = invocationCommandString
   }
 
   command.executeCommand(
