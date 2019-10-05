@@ -83,7 +83,7 @@ test('deployServiceCommand executes different command for powershell', (done) =>
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('yarn scepter cloud:configure development testprovider; if($?) { cd ./services/servicename; yarn buildtestprovider }; if($?) { cp ../../config/*.json ./build/ }; if($?) { cd ./build; yarn sls deploy extra --stage=development --region=mockRegion }')
+      expect(command).toEqual('yarn scepter cloud:configure development testprovider; if($?) { cd ./services/servicename; yarn buildtestprovider; cp ../*.js ./build }; if($?) { cp ../../config/*.json ./build/ }; if($?) { cd ./build; yarn sls deploy extra --stage=development --region=mockRegion }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()

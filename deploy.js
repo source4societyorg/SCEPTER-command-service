@@ -31,7 +31,7 @@ function callbackFunction (args, credentials, command) {
 
 function serverlessFunction (command) {
   const scepterCloudConfigure = `yarn scepter cloud:configure ${deployServiceCommand.environment} ${deployServiceCommand.provider}`
-  const scepterServiceBuild = `cd ./services/${deployServiceCommand.serviceName}; yarn build${deployServiceCommand.provider}`
+  const scepterServiceBuild = `cd ./services/${deployServiceCommand.serviceName}; yarn build${deployServiceCommand.provider}; cp ../*.js ./build`
   const copyCredentialsCommandString = `cp ../../config/*.json ./build/`
   const serverlessDeploy = `cd ./build; yarn sls deploy ${deployServiceCommand.slsArgs}--stage=${deployServiceCommand.environment} --region=${deployServiceCommand.region}`
   let execCommand = ''
