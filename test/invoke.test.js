@@ -57,7 +57,7 @@ test('invokeServiceCommand executes different command for powershell', (done) =>
   const mockCommand = {
     parameters: { shell: 'powershell' },
     executeCommand: (command, successMessage, errorMessage) => {
-      expect(command).toEqual('if($?) {cd ./services/servicename; yarn buildundefined; cd ./build; yarn sls invoke invoke local -f somefunc }')
+      expect(command).toEqual('if($?) {cd ./services/servicename; yarn buildundefined; cd ./build; cp ../*.js ./build; yarn sls invoke invoke local -f somefunc }')
       expect(successMessage.length).toBeGreaterThan(0)
       expect(errorMessage.length).toBeGreaterThan(0)
       done()

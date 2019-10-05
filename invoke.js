@@ -26,7 +26,7 @@ function callbackFunction (args, credentials, command) {
 }
 
 function serverlessFunction (command) {
-  const invocationCommandString = `cd ./services/${invokeServiceCommand.serviceName}; yarn build${invokeServiceCommand.provider}; cd ./build; yarn sls invoke ${invokeServiceCommand.slsArgs}`
+  const invocationCommandString = `cd ./services/${invokeServiceCommand.serviceName}; yarn build${invokeServiceCommand.provider}; cd ./build; cp ../*.js ./build; yarn sls invoke ${invokeServiceCommand.slsArgs}`
   let execCommand = ''
   let shell = typeof command.parameters !== 'undefined' ? command.parameters.shell : ''
   switch (shell) {
